@@ -4,7 +4,7 @@ using namespace std;
 
 const char UDDER_MAP[3][3] = {
     {'0', '0', '0'},
-    {'0', '2', '0'},
+    {'0', '1', '0'},
     {'0', '0', '0'}
 };
 
@@ -46,15 +46,15 @@ public:
 
 };
 
-void init_map(){
-    // initialize the map to test values
+void init_map(int time){
     ofstream map = ofstream("dairy.txt");
-
-    // generate a map with at least one udder
     for(int i = 0; i < 9; i++){
         for(int j = 0; j < 9; j++){
-            if(i % 3 == 0 && j % 3 == 0){
-                map << '2';
+            // add randomness with time using rand
+            srand(time);
+            int rand_num = rand() % 10;
+            if(rand_num == 0){
+                map << '1';
             } else {
                 map << '0';
             }
@@ -77,9 +77,9 @@ bool check_milking_cycle(int time){
         }
     } else {
         if (time % 4 == 1){
-            return true;
-        } else {
             return false;
+        } else {
+            return true;
         }
     }
 }
@@ -92,16 +92,11 @@ void report_milking_statistics(int &time, long int& times_milked){
     cout << "*******************" << endl;
 }
 
-int main(){
+int process_milk(int time){
     // sensor
-    init_map();
-
+    init_map(time);
     // Statistics
-
-    int time = 0;
     long int times_milked = 0;
-
-
     // Milking
     ifstream sensor = ifstream("dairy.txt");
     char sensed;
@@ -110,7 +105,7 @@ int main(){
         for(int j = 0; j < 7; j++){
             cout << "Checking " << i << "," << j << endl;
             MiniMap map(sensor, i, j);
-            // map.print();
+            map.print();
             if(map.is_udder()){
                 cout << "UDDER FOUND" << endl;
                 if(check_milking_cycle(time)){
@@ -126,6 +121,5 @@ int main(){
 
         cout <<endl;
     }
-
-    return 0;
+    return times_milked;
 }
