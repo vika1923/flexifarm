@@ -1,0 +1,60 @@
+Step 1
+    Make a group of 3-4 people (Note: Team members cannot be changed)
+    Choose 3 topics (with the group agreement) related to the Company/Factory/Organization... with a minimum of 5 departments
+
+Step 2
+    Create the following items for your project in a Word document, put them on flash memory, and take it to class:
+    Cover Page
+    Introduction (Only 2 pages) with proper formatting
+    If your project is Company/Organization/Factory... 
+    Only 5 Departments, and add 2 paragraphs for each department (No HR and IT departments)
+    After each department description, add the corresponding roles (only titles), ensuring each department has a minimum of four roles.
+    If your project is a device in:
+    Draw a general diagram/demo about how it works
+    Explain different parts (min 2  paragraphs)
+    Explain the hardware and software parts  (min 2  paragraphs)
+    Explain the novelty of your device  (min 2  paragraphs)
+
+Step 3
+    Add  the following items to your Project:
+    Add 20 different variables with different data types related to various departments.
+    Initialize them with proper values.
+    Bring the code at least on one laptop.
+    Add 5 different constants with different data types related to various departments, and with reasonable usage.
+    Note: Use meaningful names, and if necessary, use the "camelCase" or "Capitalized" approach for naming.
+
+Step 4
+    Add  the following items to your Project:
+    Create 4 if (simple if), including logical operators
+    Create 4 nested if (simple if), including logical operators
+    Create 4 nested if-else (simple if), including logical operators (at least 4 if-else)
+    Note: Use meaningful if/if-else structures, which represent your real-life scenario related to your project.
+
+Step 5
+    Add  the following items to your Project and bring to the class:
+    Create a file related to your project.
+    Add a minimum of 20 lines, and take the info from the user. In each line, you need to have 5 elements.
+    Read the lines and print each line with the format of (Item name: Item Value), and add a line at the end of each line
+    Keep the original file and perform the following action in the new version of the file:
+    Add one new line to the beginning of the file
+    Edit one item in a specific line by using seekg/seekp
+    Add a line to the end of the file
+    Perform error handeling by using: fail(), eof(), good()
+
+Step 6
+    Add  the following items to your Project and take them to the class on one of the team members' laptops:
+    Create at least 6 classes with meaningful names and fill them with the following items:
+    Create 2 for loops (Complicated body, not just single line or print) 
+    Create 2 nested for loops 
+    Create 2 while loops (Complicated body, not just single line or print)
+    Create 2 do..while loops (you need to provide the reason why you chose do while rather than while)
+
+Step 7
+    Add  the following items to your Project and take them to the class on one of the team members' laptops:
+    Create methods and distribute them to the classes created in Step 5 with meaningful names and fill them with the following items:
+    Create 3 void methods (Complicated body, not just single line or print). You can add your if/else and looping here.
+    Create 4 methods that take a minimum of 4 parameters and return a value. (Complicated body, not just a single line or print). You can add your if/else and looping here.
+    Create 1 method that takes a minimum of 4 parameters and returns multiple values through an Object  (Complicated body, not just single line or print). You can add your if/else and looping here.
+    Call some of the methods in the same class and some of them in different classes.
+    Create one recursive method (with proper body, not printing numbers or ...)
+    Use one example for a pointer and one for a reference variable (with a good reason why you do that for your project)

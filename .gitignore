@@ -26,3 +26,10 @@ Desktop.ini
 # Temporary files
 *.tmp
 *.log
+
+# Project specific files
+dairy.txt
+q
+main
+transactions_report.txt
+dairy
