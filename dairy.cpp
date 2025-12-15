@@ -234,9 +234,9 @@ int process_milk(int time){
     // scan 9x9 map with 3x3 mask searching for the udder [000, 010, 000]
     for(int i = 0; i < 7; i++){
         for(int j = 0; j < 7; j++){
-            cout << "Checking " << i << "," << j << endl;
+            // cout << "Checking " << i << "," << j << endl;
             MiniMap map(sensor, i, j);
-            map.print();
+            // map.print();
             if(map.is_udder()){
                 cout << "UDDER FOUND" << endl;
                 if(check_milking_cycle(time)){
@@ -250,16 +250,10 @@ int process_milk(int time){
             time++;
         }
 
-        cout <<endl;
+        // cout <<endl;
     }
 
     return times_milked;
 }
 
-int main(){
-    int time = 0;
-    long int litres = 0;
-    litres = process_milk(time);
-    cout << "Milked " << litres << " litres" << endl;
-    return 0;
-}
+
