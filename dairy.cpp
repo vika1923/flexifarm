@@ -281,7 +281,6 @@ int process_milk(int time){
     ifstream sensor = ifstream("dairy.txt");
     if (sensor.fail()) {
         cerr << "Error opening dairy.txt for reading" << endl;
-        return 0;
     }
 
     char sensed;
@@ -307,7 +306,11 @@ int process_milk(int time){
         // cout <<endl;
     }
 
-    // Analytics Usage
+    return times_milked;
+}
+
+void estimate_expenses(int time){
+    
     FarmAnalytics analytics;
     
     // Recursive usage
