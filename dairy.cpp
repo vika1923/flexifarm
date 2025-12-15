@@ -8,27 +8,91 @@ const char UDDER_MAP[3][3] = {
     {'0', '0', '0'}
 };
 
+class AreaMap{
+    public:
+    char map[9][9];
+    AreaMap(){
+        for(int i = 0; i < 9; i++){
+            for(int j = 0; j < 9; j++){
+                map[i][j] = '0';
+            }
+        }
+    }
+    void insert(int i, int j, char value){
+        map[i][j] = value;
+    }
+    void print_and_format_map(int i, int j, int width, int height){
+        for(int row = i; row < i + height; row++){
+            for(int col = j; col < j + width; col++){
+                cout << map[row][col];
+            }
+            cout << endl;
+        }
+    }
+    
+}
+AreaMap populate_object_manually(){
+    AreaMap map;
+    cout << "Enter values for the map (0 or 1):" << endl;
+    for(int i = 0; i < 9*9; i++){
+        char value;
+        do {
+            cin >> value;
+            if(value != '0' && value != '1'){
+                cout << "Invalid value" << endl;
+            }
+        } while(value != '0' && value != '1');
+        map.insert(i/9, i%9, value)
+    }
+    return map;
+}
+
 class MiniMap {
 public:
     char map[3][3];
+
     MiniMap(ifstream &sensor, int i, int j){
         for(int row = 0; row < 3; row++){
             int curr_row = i + row;
             int location = curr_row*10+j;
             sensor.seekg(location, ios::beg);
+            if (sensor.fail()) {
+                cerr << "Error seeking to location " << location << endl;
+                return;
+            }
             for(int col = 0; col < 3; col++){
+                if (sensor.eof()) {
+                    cerr << "Error: Reached end of file unexpectedly" << endl;
+                    return;
+                }
                 sensor >> map[row][col];
+                if (sensor.fail()) {
+                    cerr << "Error reading from file" << endl;
+                    return;
+                }
             }
         }
     }
 
+    void modify_map_if_needed(int i, int j, bool condition, char value){
+        if(condition){
+            map[i][j] = value;
+        } else {
+            map[i][j] = '0';
+        }
+    }
+
     bool is_udder(){
-        for(int i = 0; i < 3; i++){
-            for(int j = 0; j < 3; j++){
+        int i = 0;
+        while(i < 3){
+            int j = 0;
+            while(j < 3){
                 if(map[i][j] != UDDER_MAP[i][j]){
                     return false;
                 }
+                j++;
             }
+            i++;
         }
 
         return true;
@@ -44,10 +108,26 @@ public:
         }
     }
 
+    bool matches_value(
+        char a1, char a2, char a3, 
+        char b1, char b2, char b3, 
+        char c1, char c2, char c3
+    ){
+        int a_matches = a1 == b1 && a2 == b2 && a3 == b3;
+        int b_matches = b1 == c1 && b2 == c2 && b3 == c3;
+        int c_matches = c1 == a1 && c2 == a2 && c3 == a3;
+        return a_matches && b_matches && c_matches;
+    }
 };
+
+
 
 void init_map(int time){
     ofstream map = ofstream("dairy.txt");
+    if (!map.good()) {
+        cerr << "Error opening dairy.txt for writing" << endl;
+        return;
+    }
     for(int i = 0; i < 9; i++){
         for(int j = 0; j < 9; j++){
             // add randomness with time using rand
@@ -99,6 +179,10 @@ int process_milk(int time){
     long int times_milked = 0;
     // Milking
     ifstream sensor = ifstream("dairy.txt");
+    if (sensor.fail()) {
+        cerr << "Error opening dairy.txt for reading" << endl;
+        return 0;
+    }
     char sensed;
     // scan 9x9 map with 3x3 mask searching for the udder [000, 010, 000]
     for(int i = 0; i < 7; i++){
