@@ -1,0 +1,28 @@
+# Compiled executables
+*.exe
+*.out
+*.app
+
+# Compiled Object files
+*.o
+*.obj
+
+# Backup files
+*_backup.*
+*_old.*
+
+# IDE/Editor files
+.vscode/
+.vs/
+*.code-workspace
+
+# Windows specific
+Thumbs.db
+Desktop.ini
+
+# Batch files (local scripts)
+*.bat
+
+# Temporary files
+*.tmp
+*.log
