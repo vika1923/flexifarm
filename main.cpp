@@ -31,23 +31,44 @@ int main(){
     const float MILK_PRICE = 8;
 
     const int MILK_PROCESSING_NEEDED =2;
-    // const int EGG_GATHERING_NEEDED = 1;
-    // const int CHICKEN_GATHERING_NEEDED = 1;
-    // const int TOMATO_GATHERING_NEEDED = 1;
-    // const int CUCUMBER_GATHERING_NEEDED = 1;
-    // const int PUMPKIN_GATHERING_NEEDED = 1;
+    const int VEGS_GATHERING_NEEDED = 5;
+    const int EGGS_PROCESSING_NEEDED = 3;
 
+    bool looped_already = false;
+    
     while(true){
         cout << "<<< =========================== " << printTime(time) << " =========================== >>>" << endl;
         
-        if(time % MILK_PROCESSING_NEEDED == 0){
-            int t = process_milk(time);
-            cout << "Milk processed: " << t << endl;
-            milk += t;
+        if(!looped_already){
+            looped_already = true;
+        // if(time % VEGS_GATHERING_NEEDED == 0) {
+        //     cout << "=== VEGS GATHERING ===" << endl;
+        //     tomatoes += getTomatoKgToday();
+        //     cucumbers += getCucumberKgToday();
+        //     pumpkin += getPumpkinKgToday();
+        // }
+        
+
+        // if(time % MILK_PROCESSING_NEEDED == 0){
+        //     cout << "\n\n=== MILK PROCESSING ===" << endl;
+        //     int t = process_milk(time);
+        //     cout << "Milk processed: " << t << endl;
+        //     milk += t;
+        // }
+
+        if(time % EGGS_PROCESSING_NEEDED == 0){
+            cout << "\n\n=== EGGS PROCESSING ===" << endl;
+            int t1 = getNotFertilizedEggs();
+            int t2 = getHatchedChicks();
+            cout << "Not fertilized eggs: " << t1 << endl;
+            cout << "Hatched chicks: " << t2 << endl;
+            eggs += t1;
+            chickens += t2;
         }
+    }
         
         char command;
-        cout << "<-> to proceed | <w> to see weardrobe | <s> to sell products | <q> to quit" << endl;
+        cout << "<-> to proceed | <w> to see warehouse | <s> to sell products | <q> to quit" << endl;
         cin >> command;
         cin.get();
 
@@ -184,6 +205,7 @@ int main(){
                 }
             }
         } else if(command == '-'){
+            looped_already = false;
             time += 1;
         } else if(command == 'q'){
             cout << "Quit" << endl;

@@ -309,23 +309,23 @@ int process_milk(int time){
     return times_milked;
 }
 
-void estimate_expenses(int time){
+// void estimate_expenses(int time){
     
-    FarmAnalytics analytics;
+//     FarmAnalytics analytics;
     
-    // Recursive usage
-    int projected = analytics.calculate_recursive_growth(3, times_milked);
-    cout << "Projected production in 3 cycles: " << projected << endl;
+//     // Recursive usage
+//     int projected = analytics.calculate_recursive_growth(3, times_milked);
+//     cout << "Projected production in 3 cycles: " << projected << endl;
 
-    // Object return usage
-    ProductionStats stats = analytics.generate_daily_report(time, 50, times_milked, 0.9);
-    cout << "Daily Revenue Estimate: $" << stats.revenue_estimate << endl;
+//     // Object return usage
+//     ProductionStats stats = analytics.generate_daily_report(time, 50, times_milked, 0.9);
+//     cout << "Daily Revenue Estimate: $" << stats.revenue_estimate << endl;
 
-    // Pointer usage
-    analytics.update_stats_via_pointer(&stats, 10); // Add 10 liters
-    cout << "Updated Efficiency (after pointer mod): " << stats.efficiency_rating << endl;
+//     // Pointer usage
+//     analytics.update_stats_via_pointer(&stats, 10); // Add 10 liters
+//     cout << "Updated Efficiency (after pointer mod): " << stats.efficiency_rating << endl;
 
-    return times_milked;
-}
+//     return times_milked;
+// }
 
 

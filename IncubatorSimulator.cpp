@@ -228,35 +228,55 @@ using namespace std;
  * This main function is just for testing the incubator
  * In the full farming system, this would be removed
  */
-int main() {
+
+     // Create incubator simulator
+     IncubatorSimulator incubator;
+
+     
+int getNotFertilizedEggs() {
+    // Initialize random number generator
+    srand(time(0));
+    
+
+    
+    // Run simulation
+    incubator.runSimulation();
+    
+    // Get results
+    int totalEggs = incubator.getTotalEggs();
+    int fertilized = incubator.getFertilizedEggs();
+    int notFertilized = incubator.getNotFertilizedEggs();
+    
+    // Display results
+    cout << "\n========== INCUBATOR SIMULATION RESULTS ==========" << endl;
+    cout << "Total Eggs Generated: " << totalEggs << endl;
+    cout << "Fertilized: " << fertilized << " | Not Fertilized: " << notFertilized << endl;
+    cout << "==================================================\n" << endl;
+    
+    return notFertilized;
+}
+
+int getHatchedChicks() {
     // Initialize random number generator
     srand(time(0));
     
     // Create incubator simulator
     IncubatorSimulator incubator;
     
-    // Run simulation
-    incubator.runSimulation();
     
-    // Get all results (these would be used by the main farming system)
-    int totalEggs = incubator.getTotalEggs();
-    int fertilized = incubator.getFertilizedEggs();
-    int notFertilized = incubator.getNotFertilizedEggs();
+    // Get results
     int inIncubator = incubator.getEggsInIncubator();
     int hatched = incubator.getHatchedChicks();
     int failed = incubator.getFailedToHatch();
     double successRate = incubator.getSuccessRate();
     
-    // Display test results
+    // Display results
     cout << "\n========== INCUBATOR SIMULATION RESULTS ==========" << endl;
-    cout << "Total Eggs Generated: " << totalEggs << endl;
-    cout << "Fertilized: " << fertilized << " | Not Fertilized: " << notFertilized << endl;
     cout << "Loaded in Incubator: " << inIncubator << endl;
     cout << "Successfully Hatched: " << hatched << endl;
     cout << "Failed to Hatch: " << failed << endl;
     cout << "Success Rate: " << successRate << "%" << endl;
     cout << "==================================================\n" << endl;
     
-    // Return 0 (success)
-    return 0;
+    return hatched;
 }

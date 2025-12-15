@@ -1,4 +1,4 @@
-#include "flexifarm_module.h"
+
 #include <iostream>
 #include <random>
 #include <ctime>
@@ -140,10 +140,6 @@ bool harvestAuto(const std::string& crop) {
         return false;
     }
 }
-
-double getTomatoKgToday() { return tomatoKgToday; }
-double getCucumberKgToday() { return cucumberKgToday; }
-double getPumpkinKgToday() { return pumpkinKgToday; }
 
 double getTomatoKgToday() {
     cout << "\n--- FlexiFarm Status (Tomato) ---\n";
