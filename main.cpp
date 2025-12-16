@@ -118,15 +118,34 @@ int main(){
             cout << "Milk: " << milk << endl;
         } else if(command == 's'){
 
-            cout << "1. Eggs" << endl;
-            cout << "2. Chickens" << endl;
-            cout << "3. Tomatoes" << endl;
-            cout << "4. Cucumbers" << endl;
-            cout << "5. Pumpkin" << endl;
-            cout << "6. Milk" << endl;
-            cout << "Enter the product you want to sell (1 - 6)." << endl;
+            cout << "1. Eggs(" << eggs << ")" << endl;
+            cout << "2. Chickens(" << chickens << ")" << endl;
+            cout << "3. Tomatoes(" << tomatoes << ")" << endl;
+            cout << "4. Cucumbers(" << cucumbers << ")" << endl;
+            cout << "5. Pumpkin(" << pumpkin << ")" << endl;
+            cout << "6. Milk(" << milk << ")" << endl;
+            
+            char product_input;
             int product;
-            cin >> product;
+            do {
+                cout << "Enter the product you want to sell (1 - 6) or 'q' to quit: ";
+                cin >> product_input;
+                cin.get();
+                
+                if(product_input == 'q' || product_input == 'Q'){
+                    break;
+                }
+                
+                product = product_input - '0';
+                
+                if(product < 1 || product > 6){
+                    cout << "Invalid product. Please enter a number between 1-6 or 'q' to quit." << endl;
+                }
+            } while(product < 1 || product > 6);
+            
+            if(product_input == 'q' || product_input == 'Q'){
+                continue;
+            }
 
             float amount_to_sell;
             bool transaction_successful = false;
@@ -212,8 +231,6 @@ int main(){
                 } else {
                     cout << "Not enough milk! You have " << milk << " l of milk." << endl;
                 }
-            }else  {
-                cout << "Invalid product" << endl;
             }
 
             if(transaction_successful){
