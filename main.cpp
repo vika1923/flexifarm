@@ -1,7 +1,7 @@
-#include <iostream>
-#include <fstream>
-#include <string>
 #include "main.h"
+#include <fstream>
+#include <iostream>
+#include <string>
 using namespace std;
 
 class TimeKeeper {
@@ -9,7 +9,8 @@ private:
     int hours;
 
 public:
-    TimeKeeper(int initial_hours = 0) : hours(initial_hours) {}
+    TimeKeeper(int initial_hours = 0) : hours(initial_hours) {
+    }
 
     void display() {
         int days = hours / 24;
@@ -30,13 +31,14 @@ public:
     int getHours() const {
         return hours;
     }
+
 };
 
 int main(){
 
     // variables
     TimeKeeper timekeeper;
-    
+
     int balance = 0;
     int eggs = 0;
     int chickens = 0;
@@ -58,34 +60,35 @@ int main(){
     const int EGGS_PROCESSING_NEEDED = 3;
 
     bool looped_already = false;
-    
+
     while(true){
         cout << "<<< =========================== " << timekeeper.getDisplayString() << " =========================== >>>" << endl;
         if(!looped_already){
             looped_already = true;
 
-        if(timekeeper.getHours() % VEGS_GATHERING_NEEDED == 0) {
-            cout << "=== VEGS GATHERING ===" << endl;
-            tomatoes += getTomatoKgToday();
-            cucumbers += getCucumberKgToday();
-            pumpkin += getPumpkinKgToday();
-        }
+            if(timekeeper.getHours() % VEGS_GATHERING_NEEDED == 0) {
+                cout << "=== VEGS GATHERING ===" << endl;
+                tomatoes += getTomatoKgToday();
+                cucumbers += getCucumberKgToday();
+                pumpkin += getPumpkinKgToday();
+            }
 
-        if(timekeeper.getHours() % MILK_PROCESSING_NEEDED == 0){
-            cout << "\n\n=== MILK PROCESSING ===" << endl;
-            int t = process_milk(timekeeper.getHours());
-            cout << "Milk processed: " << t << endl;
-            milk += t;
-        }
+            if(timekeeper.getHours() % MILK_PROCESSING_NEEDED == 0){
+                cout << "\n\n=== MILK PROCESSING ===" << endl;
+                int t = process_milk(timekeeper.getHours());
+                cout << "Milk processed: " << t << endl;
+                milk += t;
+            }
 
-        if(timekeeper.getHours() % EGGS_PROCESSING_NEEDED == 0){
-            cout << "\n\n=== EGGS PROCESSING ===" << endl;
-            int t1 = getNotFertilizedEggs();
-            int t2 = getHatchedChicks();
-            cout << "Not fertilized eggs: " << t1 << endl;
-            cout << "Hatched chicks: " << t2 << endl;
-            eggs += t1;
-            chickens += t2;
+            if(timekeeper.getHours() % EGGS_PROCESSING_NEEDED == 0){
+                cout << "\n\n=== EGGS PROCESSING ===" << endl;
+                int t1 = getNotFertilizedEggs();
+                int t2 = getHatchedChicks();
+                cout << "Not fertilized eggs: " << t1 << endl;
+                cout << "Hatched chicks: " << t2 << endl;
+                eggs += t1;
+                chickens += t2;
+            }
         }
 
         char command;
@@ -112,13 +115,13 @@ int main(){
             cout << "Enter the product you want to sell (1 - 6). <q> to quit" << endl;
             int product;
             cin >> product;
-            
+
             float amount_to_sell;
             bool transaction_successful = false;
             string product_name;
             float price_per_unit = 0;
             float total_value = 0;
-            
+
             if(product == 1){
                 cout << "How many eggs do you want to sell? ";
                 cin >> amount_to_sell;
@@ -132,8 +135,7 @@ int main(){
                 } else {
                     cout << "Not enough eggs! You have " << eggs << " eggs." << endl;
                 }
-            }
-            else if(product == 2){
+            }else if(product == 2)  {
                 cout << "How many chickens do you want to sell? ";
                 cin >> amount_to_sell;
                 if(amount_to_sell <= chickens){
@@ -146,8 +148,7 @@ int main(){
                 } else {
                     cout << "Not enough chickens! You have " << chickens << " chickens." << endl;
                 }
-            }
-            else if(product == 3){
+            }else if(product == 3)  {
                 cout << "How much tomatoes do you want to sell? ";
                 cin >> amount_to_sell;
                 if(amount_to_sell <= tomatoes){
@@ -160,8 +161,7 @@ int main(){
                 } else {
                     cout << "Not enough tomatoes! You have " << tomatoes << " kg og tomatoes." << endl;
                 }
-            }
-            else if(product == 4){
+            }else if(product == 4)  {
                 cout << "How much cucumbers do you want to sell? ";
                 cin >> amount_to_sell;
                 if(amount_to_sell <= cucumbers){
@@ -174,8 +174,7 @@ int main(){
                 } else {
                     cout << "Not enough cucumbers! You have " << cucumbers << " kg of cucumbers." << endl;
                 }
-            }
-            else if(product == 5){
+            }else if(product == 5)  {
                 cout << "How much pumpkin do you want to sell? ";
                 cin >> amount_to_sell;
                 if(amount_to_sell <= pumpkin){
@@ -188,8 +187,7 @@ int main(){
                 } else {
                     cout << "Not enough pumpkin! You have " << pumpkin << " kg of pumpkin." << endl;
                 }
-            }
-            else if(product == 6){
+            }else if(product == 6)  {
                 cout << "How much milk do you want to sell? ";
                 cin >> amount_to_sell;
                 if(amount_to_sell <= milk){
@@ -204,11 +202,10 @@ int main(){
                 }
             }else if(product == 'q'){
                 break;
-            }
-            else{
+            }else  {
                 cout << "Invalid product" << endl;
             }
-            
+
             if(transaction_successful){
                 ofstream report("transactions_report.txt", ios::app);
                 if(report.is_open()){
@@ -233,5 +230,6 @@ int main(){
             break;
         }
     }
+
     return 0;
 }
