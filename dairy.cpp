@@ -24,6 +24,7 @@ public:
         if (cycles <= 0) {
             return current_production;
         }
+
         // Assume 10% growth per cycle
         return calculate_recursive_growth(cycles - 1, current_production * 1.10);
     }
@@ -33,7 +34,7 @@ public:
         if (stats != nullptr) {
             stats->total_milk += new_milk;
             // Update efficiency based on new total (arbitrary logic for demo)
-            stats->efficiency_rating = (stats->total_milk / stats->time_period) * 0.5; 
+            stats->efficiency_rating = (stats->total_milk / stats->time_period) * 0.5;
         }
     }
 
@@ -51,17 +52,18 @@ public:
     ProductionStats forecast_yield(int days, double current, double rate, double decay) {
         ProductionStats forecast;
         forecast.time_period = days;
-        
+
         double projected = current;
         for(int i=0; i<days; i++) {
             projected = projected * (1.0 + rate) - decay;
         }
-        
+
         forecast.total_milk = projected;
         forecast.efficiency_rating = (projected > current) ? 1.0 : 0.8;
         forecast.revenue_estimate = projected * 1.4; // Future price might be lower
         return forecast;
     }
+
 };
 
 class MiniMap {
@@ -272,11 +274,10 @@ void report_milking_statistics(int &time, int& times_milked){
     cout << "*******************" << endl;
 }
 
+int times_milked = 0;
 int process_milk(int time){
     // sensor
     init_map(time);
-    // Statistics
-    int times_milked = 0;
     // Milking
     ifstream sensor = ifstream("dairy.txt");
     if (sensor.fail()) {
@@ -309,23 +310,18 @@ int process_milk(int time){
     return times_milked;
 }
 
-// void estimate_expenses(int time){
-    
-//     FarmAnalytics analytics;
-    
-//     // Recursive usage
-//     int projected = analytics.calculate_recursive_growth(3, times_milked);
-//     cout << "Projected production in 3 cycles: " << projected << endl;
+void estimate_expenses(int time){
+    FarmAnalytics analytics;
 
-//     // Object return usage
-//     ProductionStats stats = analytics.generate_daily_report(time, 50, times_milked, 0.9);
-//     cout << "Daily Revenue Estimate: $" << stats.revenue_estimate << endl;
+    // Recursive usage
+    int projected = analytics.calculate_recursive_growth(3, times_milked);
+    cout << "Projected production in 3 cycles: " << projected << endl;
 
-//     // Pointer usage
-//     analytics.update_stats_via_pointer(&stats, 10); // Add 10 liters
-//     cout << "Updated Efficiency (after pointer mod): " << stats.efficiency_rating << endl;
+    // Object return usage
+    ProductionStats stats = analytics.generate_daily_report(time, 50, times_milked, 0.9);
+    cout << "Daily Revenue Estimate: $" << stats.revenue_estimate << endl;
 
-//     return times_milked;
-// }
-
-
+    // Pointer usage
+    analytics.update_stats_via_pointer(&stats, 10); // Add 10 liters
+    cout << "Updated Efficiency (after pointer mod): " << stats.efficiency_rating << endl;
+}

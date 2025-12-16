@@ -40,10 +40,10 @@ int main(){
     int balance = 0;
     int eggs = 0;
     int chickens = 0;
-    float tomatoes = 0;
-    float cucumbers = 0;
-    float pumpkin = 0;
-    float milk = 0;
+    int tomatoes = 0;
+    int cucumbers = 0;
+    int pumpkin = 0;
+    int milk = 0;
 
     //constants
     const int EGG_PRICE = 12;
@@ -61,7 +61,6 @@ int main(){
     
     while(true){
         cout << "<<< =========================== " << timekeeper.getDisplayString() << " =========================== >>>" << endl;
-        
         if(!looped_already){
             looped_already = true;
 
@@ -71,7 +70,6 @@ int main(){
             cucumbers += getCucumberKgToday();
             pumpkin += getPumpkinKgToday();
         }
-        
 
         if(timekeeper.getHours() % MILK_PROCESSING_NEEDED == 0){
             cout << "\n\n=== MILK PROCESSING ===" << endl;
@@ -89,8 +87,7 @@ int main(){
             eggs += t1;
             chickens += t2;
         }
-    }
-        
+
         char command;
         cout << "<-> to proceed | <w> to see warehouse | <s> to sell products | <q> to quit" << endl;
         cin >> command;
