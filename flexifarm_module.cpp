@@ -142,6 +142,8 @@ bool harvestAuto(const std::string& crop) {
 }
 
 double getTomatoKgToday() {
+    checkEnvironmentAuto();
+    harvestAuto("tomato");
     cout << "\n--- FlexiFarm Status (Tomato) ---\n";
     cout << "Heating: " << (heatingOn ? "ON" : "OFF") << "\n";
     cout << "Mist: " << (mistOn ? "ON" : "OFF") << "\n";
@@ -154,6 +156,8 @@ double getTomatoKgToday() {
 }
 
 double getCucumberKgToday() {
+    checkEnvironmentAuto();
+    harvestAuto("cucumber");
     cout << "\n--- FlexiFarm Status (Cucumber) ---\n";
     cout << "Heating: " << (heatingOn ? "ON" : "OFF") << "\n";
     cout << "Mist: " << (mistOn ? "ON" : "OFF") << "\n";
@@ -166,6 +170,8 @@ double getCucumberKgToday() {
 }
 
 double getPumpkinKgToday() {
+    checkEnvironmentAuto();
+    harvestAuto("pumpkin");
     cout << "\n--- FlexiFarm Status (Pumpkin) ---\n";
     cout << "Heating: " << (heatingOn ? "ON" : "OFF") << "\n";
     cout << "Mist: " << (mistOn ? "ON" : "OFF") << "\n";

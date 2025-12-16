@@ -1,11 +1,21 @@
 // Include libraries for random numbers and time
 #include <cstdlib>   // For rand() function (random numbers)
 #include <ctime>     // For time() function (random seed)
+#include <cmath>     // For mathematical functions
 
 /**
  * IncubatorSimulator Class
  * Part of a farming system - simulates egg incubation process
  * Returns data to the main farming system instead of printing reports
+ * 
+ * Enhanced with:
+ * - Egg quality scoring system
+ * - Multi-stage incubation (21 days)
+ * - Dynamic temperature/humidity effects
+ * - Egg rotation tracking
+ * - Candling viability checks
+ * - Multiple egg types/species
+ * - Condition-based success calculations
  */
 class IncubatorSimulator {
 private:
@@ -75,7 +85,7 @@ private:
         eggsInIncubator = 0;
         
         // Load fertilized eggs into incubator
-        for (int i = 0; i < totalEggs && eggsInIncubator < eggsToLoad; i++) {
+        for (int i = 0; eggsInIncubator < eggsToLoad; i++) {
             if (eggHealthStatus[i]) {  // If egg is fertilized
                 eggInIncubator[i] = true;
                 eggsInIncubator++;

@@ -1,18 +1,41 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 #include "main.h"
 using namespace std;
 
-string printTime(int hours) {
-    int days = hours / 24;
-    int remaining_hours = hours % 24;
-    return "DAY " + to_string(days) + " : HOUR " + to_string(remaining_hours);
-}
+class TimeKeeper {
+private:
+    int hours;
+
+public:
+    TimeKeeper(int initial_hours = 0) : hours(initial_hours) {}
+
+    void display() {
+        int days = hours / 24;
+        int remaining_hours = hours % 24;
+        cout << days << ":" << remaining_hours;
+    }
+
+    string getDisplayString() {
+        int days = hours / 24;
+        int remaining_hours = hours % 24;
+        return "DAY " + to_string(days) + " : HOUR " + to_string(remaining_hours);
+    }
+
+    void increment(int hours_to_add = 1) {
+        hours += hours_to_add;
+    }
+
+    int getHours() const {
+        return hours;
+    }
+};
 
 int main(){
 
     // variables
-    int time = 0;
+    TimeKeeper timekeeper;
     
     int balance = 0;
     int eggs = 0;
@@ -37,26 +60,27 @@ int main(){
     bool looped_already = false;
     
     while(true){
-        cout << "<<< =========================== " << printTime(time) << " =========================== >>>" << endl;
+        cout << "<<< =========================== " << timekeeper.getDisplayString() << " =========================== >>>" << endl;
         
         if(!looped_already){
             looped_already = true;
-        // if(time % VEGS_GATHERING_NEEDED == 0) {
-        //     cout << "=== VEGS GATHERING ===" << endl;
-        //     tomatoes += getTomatoKgToday();
-        //     cucumbers += getCucumberKgToday();
-        //     pumpkin += getPumpkinKgToday();
-        // }
+
+        if(timekeeper.getHours() % VEGS_GATHERING_NEEDED == 0) {
+            cout << "=== VEGS GATHERING ===" << endl;
+            tomatoes += getTomatoKgToday();
+            cucumbers += getCucumberKgToday();
+            pumpkin += getPumpkinKgToday();
+        }
         
 
-        // if(time % MILK_PROCESSING_NEEDED == 0){
-        //     cout << "\n\n=== MILK PROCESSING ===" << endl;
-        //     int t = process_milk(time);
-        //     cout << "Milk processed: " << t << endl;
-        //     milk += t;
-        // }
+        if(timekeeper.getHours() % MILK_PROCESSING_NEEDED == 0){
+            cout << "\n\n=== MILK PROCESSING ===" << endl;
+            int t = process_milk(timekeeper.getHours());
+            cout << "Milk processed: " << t << endl;
+            milk += t;
+        }
 
-        if(time % EGGS_PROCESSING_NEEDED == 0){
+        if(timekeeper.getHours() % EGGS_PROCESSING_NEEDED == 0){
             cout << "\n\n=== EGGS PROCESSING ===" << endl;
             int t1 = getNotFertilizedEggs();
             int t2 = getHatchedChicks();
@@ -194,7 +218,7 @@ int main(){
                     // Write a blank line first for clear separation
                     report << endl;
                     // Write timestamp, then entry, then another newline for consistency
-                    report << "[" << printTime(time) << "]" << endl;
+                    report << "[" << timekeeper.getDisplayString() << "]" << endl;
                     report << "Product: " << product_name << endl
                            << "Amount: " << amount_to_sell << endl
                            << "Price per unit: " << price_per_unit << endl
@@ -206,7 +230,7 @@ int main(){
             }
         } else if(command == '-'){
             looped_already = false;
-            time += 1;
+            timekeeper.increment();
         } else if(command == 'q'){
             cout << "Quit" << endl;
             break;
