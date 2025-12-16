@@ -2,230 +2,127 @@
 #include <cstdlib>   // For rand() function (random numbers)
 #include <ctime>     // For time() function (random seed)
 #include <cmath>     // For mathematical functions
+#include <iostream>
+#include <vector>
 
-/**
- * IncubatorSimulator Class
- * Part of a farming system - simulates egg incubation process
- * Returns data to the main farming system instead of printing reports
- * 
- * Enhanced with:
- * - Egg quality scoring system
- * - Multi-stage incubation (21 days)
- * - Dynamic temperature/humidity effects
- * - Egg rotation tracking
- * - Candling viability checks
- * - Multiple egg types/species
- * - Condition-based success calculations
- */
-class IncubatorSimulator {
-private:
-    // ========== CONSTANTS ==========
-    static const int MAX_EGGS = 20;           // Maximum number of eggs to generate
-    static const int MIN_EGGS = 5;            // Minimum number of eggs to generate
-    
-    // ========== INSTANCE VARIABLES ==========
-    int totalEggs;              // Total number of eggs generated
-    int fertilizedEggs;         // Number of fertilized eggs
-    int notFertilizedEggs;      // Number of not fertilized eggs
-    int eggsInIncubator;        // Number of eggs loaded in incubator
-    int hatchedChicks;          // Number of successfully hatched chicks
-    int failedToHatch;          // Number of eggs that didn't hatch
-    double successRate;         // Percentage of successful hatches
-    
-    // Arrays to track egg status
-    bool eggHealthStatus[MAX_EGGS];   // true = fertilized, false = not fertilized
-    bool eggInIncubator[MAX_EGGS];    // true = in incubator, false = not
-    
-    // Default incubator settings
-    double temperature;         // Incubator temperature (37.5 Celsius)
-    double humidity;            // Incubator humidity (55%)
-    
-    /**
-     * Generate random eggs with random fertilization status
-     */
-    void generateEggs() {
-        // Generate random number of eggs between 5-20
-        totalEggs = (rand() % (MAX_EGGS - MIN_EGGS + 1)) + MIN_EGGS;
-        
-        // Initialize counters
-        fertilizedEggs = 0;
-        notFertilizedEggs = 0;
-        
-        // Initialize arrays
-        for (int i = 0; i < MAX_EGGS; i++) {
-            eggHealthStatus[i] = false;
-            eggInIncubator[i] = false;
+using namespace std;
+
+class Hen {
+public:
+    bool laidEgg;
+    bool fertilized;
+
+    Hen() : laidEgg(false), fertilized(false) {}
+
+    void layEgg() {
+        laidEgg = (rand() % 2 == 0);  // 50% chance to lay egg
+        if (laidEgg) {
+            fertilized = (rand() % 2 == 0);  // 50% chance fertilized
         }
-        
-        // Randomly assign fertilization status to each egg
-        for (int i = 0; i < totalEggs; i++) {
-            bool isFertilized = (rand() % 2 == 0);  // 50% chance
-            eggHealthStatus[i] = isFertilized;
-            
-            if (isFertilized) {
-                fertilizedEggs++;
+    }
+};
+
+class Incubator {
+public:
+    int totalEggsReceived;
+    int eggsStage1;  // day 1-10
+    int eggsStage2;  // day 10-20
+    int eggsStage3;  // day 20-30
+    int hatchedEggs;
+    int deadEggs;
+
+    Incubator() : totalEggsReceived(0), eggsStage1(0), eggsStage2(0), eggsStage3(0), hatchedEggs(0), deadEggs(0) {}
+
+    void addEggs(int count) {
+        totalEggsReceived += count;
+        eggsStage1 += count;
+    }
+
+    int simulate() {
+        // Stage 3 eggs either hatch or die
+        for (int i = 0; i < eggsStage3; i++) {
+            if (rand() % 2 == 0) {
+                hatchedEggs++;
             } else {
-                notFertilizedEggs++;
+                deadEggs++;
             }
         }
-    }
-    
-    /**
-     * Load fertilized eggs into the incubator
-     */
-    void loadIncubator() {
-        // Only proceed if we have fertilized eggs
-        if (fertilizedEggs == 0) {
-            eggsInIncubator = 0;
-            return;
-        }
-        
-        // Randomly select how many fertilized eggs to load (1 to all)
-        int eggsToLoad = (rand() % fertilizedEggs) + 1;
-        eggsInIncubator = 0;
-        
-        // Load fertilized eggs into incubator
-        for (int i = 0; eggsInIncubator < eggsToLoad; i++) {
-            if (eggHealthStatus[i]) {  // If egg is fertilized
-                eggInIncubator[i] = true;
-                eggsInIncubator++;
+        eggsStage3 = 0;
+
+        // Stage 2 eggs move to stage 3 or die
+        for (int i = 0; i < eggsStage2; i++) {
+            if (rand() % 10 > 1) {  // 80% survive
+                eggsStage3++;
+            } else {
+                deadEggs++;
             }
         }
+        eggsStage2 = 0;
+
+        // Stage 1 eggs move to stage 2 or die
+        for (int i = 0; i < eggsStage1; i++) {
+            if (rand() % 10 > 1) {  // 80% survive
+                eggsStage2++;
+            } else {
+                deadEggs++;
+            }
+        }
+        eggsStage1 = 0;
+
+        cout << "=== Incubator Status ===" << endl;
+        cout << "Total eggs received: " << totalEggsReceived << endl;
+        cout << "Eggs in stage 1 (day 1-10): " << eggsStage1 << endl;
+        cout << "Eggs in stage 2 (day 10-20): " << eggsStage2 << endl;
+        cout << "Eggs in stage 3 (day 20-30): " << eggsStage3 << endl;
+        cout << "Hatched eggs: " << hatchedEggs << endl;
+        cout << "Dead eggs: " << deadEggs << endl;
+
+        return hatchedEggs;
     }
-    
-    /**
-     * Setup incubator environment with default optimal values
-     */
-    void setupConditions() {
-        temperature = 37.5;  // Optimal temperature for chicken eggs
-        humidity = 55.0;     // Optimal humidity percentage
-    }
-    
-    /**
-     * Simulate hatching process
-     */
-    void performHatching() {
-        hatchedChicks = 0;
-        
-        // Check each egg in the incubator
-        for (int i = 0; i < totalEggs; i++) {
-            if (eggInIncubator[i]) {
-                // 85% success rate for hatching
-                bool hatched = (rand() % 100 < 85);
-                
-                if (hatched) {
-                    hatchedChicks++;
+};
+
+class Selector {
+public:
+    // Pointer to Incubator; the '*' means "pointer to" (i.e., Incubator* is a pointer to an Incubator object)
+    Incubator* incubator;
+
+    Selector(Incubator* inc) : incubator(inc) {}
+
+    int checkHens(vector<Hen>& hens) {
+        int unfertilized = 0;
+        int fertilized = 0;
+
+        for (int i = 0; i < hens.size(); i++) {
+            if (hens[i].laidEgg) {
+                // Randomly check if fertilized
+                bool checkResult = (rand() % 2 == 0) ? hens[i].fertilized : !hens[i].fertilized;
+                if (checkResult) {
+                    fertilized++;
+                } else {
+                    unfertilized++;
                 }
             }
         }
-        
-        // Calculate number that failed to hatch
-        failedToHatch = eggsInIncubator - hatchedChicks;
-        
-        // Calculate success rate
-        if (eggsInIncubator > 0) {
-            successRate = ((double)hatchedChicks / eggsInIncubator) * 100.0;
-        } else {
-            successRate = 0.0;
-        }
-    }
-    
-public:
-    /**
-     * Constructor - Initialize all variables
-     */
-    IncubatorSimulator() {
-        totalEggs = 0;
-        fertilizedEggs = 0;
-        notFertilizedEggs = 0;
-        eggsInIncubator = 0;
-        hatchedChicks = 0;
-        failedToHatch = 0;
-        successRate = 0.0;
-        temperature = 0.0;
-        humidity = 0.0;
-    }
-    
-    /**
-     * Run the complete incubation simulation
-     * No user input required - uses default values
-     */
-    void runSimulation() {
-        // Step 1: Generate eggs
-        generateEggs();
-        
-        // Step 2: Load eggs into incubator
-        loadIncubator();
-        
-        // Step 3: Setup conditions
-        setupConditions();
-        
-        // Step 4: Perform hatching
-        performHatching();
-    }
-    
-    // ========== GETTER METHODS - Return values for main farming system ==========
-    
-    /**
-     * Get total number of eggs generated
-     */
-    int getTotalEggs() {
-        return totalEggs;
-    }
-    
-    /**
-     * Get number of fertilized eggs
-     */
-    int getFertilizedEggs() {
-        return fertilizedEggs;
-    }
-    
-    /**
-     * Get number of not fertilized eggs
-     */
-    int getNotFertilizedEggs() {
-        return notFertilizedEggs;
-    }
-    
-    /**
-     * Get number of eggs loaded in incubator
-     */
-    int getEggsInIncubator() {
-        return eggsInIncubator;
-    }
-    
-    /**
-     * Get number of successfully hatched chicks
-     */
-    int getHatchedChicks() {
-        return hatchedChicks;
-    }
-    
-    /**
-     * Get number of eggs that failed to hatch
-     */
-    int getFailedToHatch() {
-        return failedToHatch;
-    }
-    
-    /**
-     * Get success rate as percentage
-     */
-    double getSuccessRate() {
-        return successRate;
-    }
-    
-    /**
-     * Get incubator temperature
-     */
-    double getTemperature() {
-        return temperature;
-    }
-    
-    /**
-     * Get incubator humidity
-     */
-    double getHumidity() {
-        return humidity;
+
+        incubator->addEggs(fertilized);
+        return unfertilized;
     }
 };
+
+// Global instances
+vector<Hen> hens(5);  // 5 hens
+Incubator incubator;
+Selector selector(&incubator);
+
+int getNotFertilizedEggs() {
+    // Make all hens lay eggs
+    for (int i = 0; i < hens.size(); i++) {
+        hens[i].layEgg();
+    }
+    // Check hens and return unfertilized count
+    return selector.checkHens(hens);
+}
+
+int getHatchedChicks() {
+    return incubator.simulate();
+}

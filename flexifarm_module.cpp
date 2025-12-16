@@ -1,6 +1,6 @@
 
 #include <iostream>
-#include <random>
+#include <cstdlib>
 #include <ctime>
 
 using namespace std;
@@ -9,24 +9,17 @@ using namespace std;
 static bool heatingOn = false;
 static bool mistOn = false;
 static bool uvOn = true;
-static int mistSeconds = 8;
 
 static double tomatoKgToday = 0.0;
 static double cucumberKgToday = 0.0;
 static double pumpkinKgToday = 0.0;
 
-// random engine
-static std::mt19937 rng;
-
-// helpers
-static double randDouble(double a, double b) {
-    std::uniform_real_distribution<double> dist(a, b);
-    return dist(rng);
+static double randDouble(double min, double max) {
+    return min + (max - min) * (rand() / (RAND_MAX + 1.0));
 }
 
-static int randInt(int a, int b) {
-    std::uniform_int_distribution<int> dist(a, b);
-    return dist(rng);
+static int randInt(int min, int max) {
+    return min + rand() % (max - min + 1);
 }
 
 static bool isRipe(const string& crop, const string& color) {
@@ -64,24 +57,7 @@ static string randomColorForCrop(const string& crop) {
     return "unknown";
 }
 
-// -------- functions your leader will call --------
-void startNewDay() {
-    rng.seed(static_cast<unsigned>(time(nullptr))); // different each run
-
-    // reset totals
-    tomatoKgToday = 0.0;
-    cucumberKgToday = 0.0;
-    pumpkinKgToday = 0.0;
-
-    // reset states
-    heatingOn = false;
-    mistOn = false;
-    uvOn = true;
-    mistSeconds = 8;
-}
-
 void checkEnvironmentAuto() {
-    // generate fresh data each run
     double tempC = randDouble(14.0, 28.0);
     double airHumidity = randDouble(30.0, 70.0);
     double rootHumidity = randDouble(40.0, 80.0);
@@ -94,15 +70,8 @@ void checkEnvironmentAuto() {
     // Mist/Watering
     if (rootHumidity < 55.0 || airHumidity < 45.0) {
         mistOn = true;
-        mistSeconds = 14;
     } else {
         mistOn = false;
-        mistSeconds = 8;
-    }
-
-    // Nutrient alert effect
-    if (nutrientPPM < 700.0) {
-        mistSeconds = mistSeconds + 2;
     }
 
     uvOn = true;
@@ -117,7 +86,7 @@ void checkEnvironmentAuto() {
 bool harvestAuto(const std::string& crop) {
     string color = randomColorForCrop(crop);
 
-    // random kg ranges per crop (feel free to tweak)
+    // random kg ranges per crop 
     double kg = 0.0;
     if (crop == "tomato") kg = randDouble(0.2, 2.0);
     else if (crop == "cucumber") kg = randDouble(0.2, 1.5);
@@ -127,7 +96,7 @@ bool harvestAuto(const std::string& crop) {
     cout << "\nCrop: " << crop << " | Color: " << color << "\n";
 
     if (isRipe(crop, color)) {
-        cout << "✅ Ripe -> Harvesting...\n";
+        cout << "Ripe -> Harvesting...\n";
         cout << "Weight: " << kg << " kg\n";
 
         if (crop == "tomato") tomatoKgToday += kg;
@@ -136,7 +105,7 @@ bool harvestAuto(const std::string& crop) {
 
         return true;
     } else {
-        cout << "❌ Not ripe -> Skipping.\n";
+        cout << "Not ripe -> Skipping.\n";
         return false;
     }
 }
@@ -147,7 +116,6 @@ double getTomatoKgToday() {
     cout << "\n--- FlexiFarm Status (Tomato) ---\n";
     cout << "Heating: " << (heatingOn ? "ON" : "OFF") << "\n";
     cout << "Mist: " << (mistOn ? "ON" : "OFF") << "\n";
-    cout << "Mist time: " << mistSeconds << " sec\n";
     cout << "UV: " << (uvOn ? "ON" : "OFF") << "\n";
     cout << "Tomato harvested today: " << tomatoKgToday << " kg\n";
     cout << "--------------------------------\n";
@@ -161,7 +129,6 @@ double getCucumberKgToday() {
     cout << "\n--- FlexiFarm Status (Cucumber) ---\n";
     cout << "Heating: " << (heatingOn ? "ON" : "OFF") << "\n";
     cout << "Mist: " << (mistOn ? "ON" : "OFF") << "\n";
-    cout << "Mist time: " << mistSeconds << " sec\n";
     cout << "UV: " << (uvOn ? "ON" : "OFF") << "\n";
     cout << "Cucumber harvested today: " << cucumberKgToday << " kg\n";
     cout << "----------------------------------\n";
@@ -175,7 +142,6 @@ double getPumpkinKgToday() {
     cout << "\n--- FlexiFarm Status (Pumpkin) ---\n";
     cout << "Heating: " << (heatingOn ? "ON" : "OFF") << "\n";
     cout << "Mist: " << (mistOn ? "ON" : "OFF") << "\n";
-    cout << "Mist time: " << mistSeconds << " sec\n";
     cout << "UV: " << (uvOn ? "ON" : "OFF") << "\n";
     cout << "Pumpkin harvested today: " << pumpkinKgToday << " kg\n";
     cout << "---------------------------------\n";

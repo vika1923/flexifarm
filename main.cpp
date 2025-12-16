@@ -1,4 +1,6 @@
 #include "main.h"
+#include "IncubatorSimulator.cpp"
+#include "coloredOutputs.h"
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -55,40 +57,50 @@ int main(){
     const float PUMPKIN_PRICE = 9;
     const float MILK_PRICE = 8;
 
-    const int MILK_PROCESSING_NEEDED =2;
-    const int VEGS_GATHERING_NEEDED = 5;
-    const int EGGS_PROCESSING_NEEDED = 3;
+    const int MILK_PROCESSING_NEEDED = 2;
+    const int VEGS_GATHERING_NEEDED = 4;
+    const int EGGS_PROCESSING_NEEDED = 5;
+
+    srand(time(0));  // Seed random for incubator
 
     bool looped_already = false;
 
     while(true){
-        cout << "<<< =========================== " << timekeeper.getDisplayString() << " =========================== >>>" << endl;
+        printGreen("\n\n<<< =========================== " + timekeeper.getDisplayString() + " =========================== >>>\n");
         if(!looped_already){
             looped_already = true;
 
             if(timekeeper.getHours() % VEGS_GATHERING_NEEDED == 0) {
-                cout << "=== VEGS GATHERING ===" << endl;
+                printCyan("=== VEGS GATHERING ===");
+                cout << endl;
                 tomatoes += getTomatoKgToday();
                 cucumbers += getCucumberKgToday();
                 pumpkin += getPumpkinKgToday();
             }
 
             if(timekeeper.getHours() % MILK_PROCESSING_NEEDED == 0){
-                cout << "\n\n=== MILK PROCESSING ===" << endl;
+                cout << "\n\n";
+                printCyan("=== MILK PROCESSING ===");
+                cout << endl;
                 int t = process_milk(timekeeper.getHours());
                 cout << "Milk processed: " << t << endl;
                 milk += t;
             }
 
             if(timekeeper.getHours() % EGGS_PROCESSING_NEEDED == 0){
-                cout << "\n\n=== EGGS PROCESSING ===" << endl;
-                int t1 = getNotFertilizedEggs();
-                int t2 = getHatchedChicks();
-                cout << "Not fertilized eggs: " << t1 << endl;
-                cout << "Hatched chicks: " << t2 << endl;
-                eggs += t1;
-                chickens += t2;
+                cout << "\n\n";
+                printCyan("=== EGGS PROCESSING ===");
+                cout << endl;
+                int unfertilized = getNotFertilizedEggs();
+                cout << "Unfertilized eggs collected: " << unfertilized << endl;
+                eggs += unfertilized;
+                
+                int hatched = getHatchedChicks();
+                cout << "Chicks hatched: " << hatched << endl;
+                chickens += hatched;
             }
+
+            
         }
 
         char command;
@@ -112,7 +124,7 @@ int main(){
             cout << "4. Cucumbers" << endl;
             cout << "5. Pumpkin" << endl;
             cout << "6. Milk" << endl;
-            cout << "Enter the product you want to sell (1 - 6). <q> to quit" << endl;
+            cout << "Enter the product you want to sell (1 - 6)." << endl;
             int product;
             cin >> product;
 
@@ -200,8 +212,6 @@ int main(){
                 } else {
                     cout << "Not enough milk! You have " << milk << " l of milk." << endl;
                 }
-            }else if(product == 'q'){
-                break;
             }else  {
                 cout << "Invalid product" << endl;
             }
