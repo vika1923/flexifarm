@@ -178,7 +178,7 @@ public:
         }
     }
 
-    string insert(int i, int j, char value){
+    void insert(int i, int j, char value){
         map[i][j] = value;
     }
 
