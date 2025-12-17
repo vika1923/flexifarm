@@ -67,9 +67,11 @@ int main(){
 
     while(true){
         printGreen("\n\n<<< =========================== " + timekeeper.getDisplayString() + " =========================== >>>\n");
-        if(!looped_already){
-            looped_already = true;
+        
+        if(!looped_already) {
 
+            looped_already = true;
+            
             if(timekeeper.getHours() % VEGS_GATHERING_NEEDED == 0) {
                 printCyan("=== VEGS GATHERING ===");
                 cout << endl;
@@ -100,13 +102,11 @@ int main(){
                 chickens += hatched;
             }
 
-            
         }
 
         char command;
         cout << "<-> to proceed | <w> to see warehouse | <s> to sell products | <q> to quit" << endl;
         cin >> command;
-        cin.get();
 
         if(command == 'w'){
             cout << "Balance: " << balance << endl;
@@ -130,7 +130,6 @@ int main(){
             do {
                 cout << "Enter the product you want to sell (1 - 6) or 'q' to quit: ";
                 cin >> product_input;
-                cin.get();
                 
                 if(product_input == 'q' || product_input == 'Q'){
                     break;
@@ -236,7 +235,6 @@ int main(){
             if(transaction_successful){
                 ofstream report("transactions_report.txt", ios::app);
                 if(report.is_open()){
-                    // Write a blank line first for clear separation
                     report << endl;
                     // Write timestamp, then entry, then another newline for consistency
                     report << "[" << timekeeper.getDisplayString() << "]" << endl;

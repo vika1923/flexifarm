@@ -2,7 +2,7 @@
 #include <iostream>
 using namespace std;
 
-const char UDDER_MAP[3][3] = {
+const char UDDER_MAP[3][3] = {  // golden standard of cow udder
     {'0', '0', '0'},
     {'0', '1', '0'},
     {'0', '0', '0'}
@@ -27,13 +27,22 @@ public:
 
         // Assume 10% growth per cycle
         return calculate_recursive_growth(cycles - 1, current_production * 1.10);
+
+        /*
+        same as 
+
+        double current_production = 0;
+        for(int cycle:cycles){
+            current_production += cycle*1.1;
+        }
+        return current_production;
+        */
     }
 
     // Method using pointer to modify object
     void update_stats_via_pointer(ProductionStats* stats, int new_milk) {
-        if (stats != nullptr) {
-            stats->total_milk += new_milk;
-            // Update efficiency based on new total (arbitrary logic for demo)
+        if (stats != nullptr) { // nullptr - pointer is not pointing to any object
+            stats->total_milk += new_milk; // dereference pointer to access object members
             stats->efficiency_rating = (stats->total_milk / stats->time_period) * 0.5;
         }
     }
@@ -44,11 +53,11 @@ public:
         stats.time_period = time;
         stats.total_milk = milk;
         stats.efficiency_rating = efficiency;
-        stats.revenue_estimate = milk * 1.5; // $1.5 per liter
+        stats.revenue_estimate = milk * 8; // $8 per liter
         return stats;
     }
 
-    // Method 2 returning an object
+    // Method 2 returning an object with 4 arguments
     ProductionStats forecast_yield(int days, double current, double rate, double decay) {
         ProductionStats forecast;
         forecast.time_period = days;
@@ -59,7 +68,7 @@ public:
         }
 
         forecast.total_milk = projected;
-        forecast.efficiency_rating = (projected > current) ? 1.0 : 0.8;
+        forecast.efficiency_rating = projected / days;
         forecast.revenue_estimate = projected * 1.4; // Future price might be lower
         return forecast;
     }
@@ -73,7 +82,7 @@ public:
     MiniMap(ifstream &sensor, int i, int j){
         for(int row = 0; row < 3; row++){
             int curr_row = i + row;
-            int location = curr_row*10+j;
+            int location = curr_row*10+j; // each row has 9 chars + newline = 10
             sensor.seekg(location, ios::beg);
             if (sensor.fail()) {
                 cerr << "Error seeking to location " << location << endl;
@@ -107,12 +116,13 @@ public:
         map[2][2] = c3;
     }
 
-    void modify_map_if_needed(int i, int j, bool condition, char value){
+    int modify_map_if_needed_and_return_0(int i, int j, bool condition, char value){
         if(condition){
             map[i][j] = value;
         } else {
-            map[i][j] = '0';
+            map[i][j] = map[i][j];
         }
+        return 0;
     }
 
     bool is_udder(){
@@ -148,9 +158,9 @@ public:
         char b1, char b2, char b3,
         char c1, char c2, char c3
         ){
-        int a_matches = a1 == b1 && a2 == b2 && a3 == b3;
-        int b_matches = b1 == c1 && b2 == c2 && b3 == c3;
-        int c_matches = c1 == a1 && c2 == a2 && c3 == a3;
+        bool a_matches = a1 == b1 && a2 == b2 && a3 == b3;
+        bool b_matches = b1 == c1 && b2 == c2 && b3 == c3;
+        bool c_matches = c1 == a1 && c2 == a2 && c3 == a3;
         return a_matches && b_matches && c_matches;
     }
 
@@ -168,7 +178,7 @@ public:
         }
     }
 
-    void insert(int i, int j, char value){
+    string insert(int i, int j, char value){
         map[i][j] = value;
     }
 
@@ -275,6 +285,23 @@ void report_milking_statistics(int &time, int& times_milked){
 }
 
 int times_milked = 0;
+
+void estimate_expenses(int time){
+    FarmAnalytics analytics;
+
+    // Recursive usage
+    int projected = analytics.calculate_recursive_growth(3, times_milked);
+    cout << "Projected production in 3 cycles: " << projected << endl;
+
+    // Object return usage
+    ProductionStats stats = analytics.generate_daily_report(time, 50, times_milked, 0.9);
+    cout << "Daily Revenue Estimate: $" << stats.revenue_estimate << endl;
+
+    // Pointer usage
+    analytics.update_stats_via_pointer(&stats, 10); // Add 10 liters
+    cout << "Updated Efficiency (after pointer mod): " << stats.efficiency_rating << endl;
+}
+
 int process_milk(int time){
     // sensor
     init_map(time);
@@ -306,22 +333,10 @@ int process_milk(int time){
 
         // cout <<endl;
     }
+    sensor.close();
+    estimate_expenses(time);
 
     return times_milked;
 }
 
-void estimate_expenses(int time){
-    FarmAnalytics analytics;
 
-    // Recursive usage
-    int projected = analytics.calculate_recursive_growth(3, times_milked);
-    cout << "Projected production in 3 cycles: " << projected << endl;
-
-    // Object return usage
-    ProductionStats stats = analytics.generate_daily_report(time, 50, times_milked, 0.9);
-    cout << "Daily Revenue Estimate: $" << stats.revenue_estimate << endl;
-
-    // Pointer usage
-    analytics.update_stats_via_pointer(&stats, 10); // Add 10 liters
-    cout << "Updated Efficiency (after pointer mod): " << stats.efficiency_rating << endl;
-}

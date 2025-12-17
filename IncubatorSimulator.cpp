@@ -1,7 +1,5 @@
 // Include libraries for random numbers and time
 #include <cstdlib>   // For rand() function (random numbers)
-#include <ctime>     // For time() function (random seed)
-#include <cmath>     // For mathematical functions
 #include <iostream>
 #include <vector>
 
@@ -12,7 +10,10 @@ public:
     bool laidEgg;
     bool fertilized;
 
-    Hen() : laidEgg(false), fertilized(false) {}
+    Hen() {
+        laidEgg = false;
+        fertilized = false;
+    }
 
     void layEgg() {
         laidEgg = (rand() % 2 == 0);  // 50% chance to lay egg
@@ -31,7 +32,14 @@ public:
     int hatchedEggs;
     int deadEggs;
 
-    Incubator() : totalEggsReceived(0), eggsStage1(0), eggsStage2(0), eggsStage3(0), hatchedEggs(0), deadEggs(0) {}
+    Incubator() {
+        totalEggsReceived = 0;
+        eggsStage1 = 0;
+        eggsStage2 = 0;
+        eggsStage3 = 0;
+        hatchedEggs = 0;
+        deadEggs = 0;
+    }
 
     void addEggs(int count) {
         totalEggsReceived += count;
@@ -47,7 +55,7 @@ public:
                 deadEggs++;
             }
         }
-        eggsStage3 = 0;
+        
 
         // Stage 2 eggs move to stage 3 or die
         for (int i = 0; i < eggsStage2; i++) {
@@ -57,7 +65,7 @@ public:
                 deadEggs++;
             }
         }
-        eggsStage2 = 0;
+
 
         // Stage 1 eggs move to stage 2 or die
         for (int i = 0; i < eggsStage1; i++) {
@@ -67,7 +75,6 @@ public:
                 deadEggs++;
             }
         }
-        eggsStage1 = 0;
 
         cout << "=== Incubator Status ===" << endl;
         cout << "Total eggs received: " << totalEggsReceived << endl;
@@ -77,7 +84,14 @@ public:
         cout << "Hatched eggs: " << hatchedEggs << endl;
         cout << "Dead eggs: " << deadEggs << endl;
 
-        return hatchedEggs;
+        deadEggs = 0;
+
+        int r = hatchedEggs;
+        hatchedEggs = 0;
+
+        return r;
+
+        
     }
 };
 
@@ -86,7 +100,9 @@ public:
     // Pointer to Incubator; the '*' means "pointer to" (i.e., Incubator* is a pointer to an Incubator object)
     Incubator* incubator;
 
-    Selector(Incubator* inc) : incubator(inc) {}
+    Selector(Incubator* inc) {
+        incubator = inc;
+    }
 
     int checkHens(vector<Hen>& hens) {
         int unfertilized = 0;
@@ -104,7 +120,7 @@ public:
             }
         }
 
-        incubator->addEggs(fertilized);
+        incubator->addEggs(fertilized); // (*incubator).addEggs(fertilized);
         return unfertilized;
     }
 };

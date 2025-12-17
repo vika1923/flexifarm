@@ -4,24 +4,26 @@
 
 using namespace std;
 
-// -------- internal "shared state" (no class, no struct) --------
-static bool heatingOn = false;
-static bool mistOn = false;
-static bool uvOn = true;
+bool heatingOn = false;
+bool mistOn = false;
 
-static double tomatoKgToday = 0.0;
-static double cucumberKgToday = 0.0;
-static double pumpkinKgToday = 0.0;
+double tomatoKgToday = 0.0;
+double cucumberKgToday = 0.0;
+double pumpkinKgToday = 0.0;
 
-static double randDouble(double min, double max) {
-    return min + (max - min) * (rand() / (RAND_MAX + 1.0));
+double randDouble(double min, double max) {
+    // The RAND_MAX macro in C++ is an integer constant expression that represents the maximum value that can be returned by the std::rand() function. 
+    return min + (max - min) * (rand() / (RAND_MAX + 1.0)); 
+    // Adding 1.0 to RAND_MAX to ensure the result is less than max
+    // rand() / (RAND_MAX + 1.0) is in [0, 1)
 }
 
-static int randInt(int min, int max) {
+int randInt(int min, int max) {
     return min + rand() % (max - min + 1);
+    // min + rand % range gives [min, max]
 }
 
-static bool isRipe(const string& crop, const string& color) {
+bool isRipe(const string& crop, const string& color) { // string& crop - reference to cell with crop
     if (crop == "tomato") {
         return (color == "red" || color == "deep red");
     } else if (crop == "cucumber") {
@@ -32,7 +34,7 @@ static bool isRipe(const string& crop, const string& color) {
     return false;
 }
 
-static string randomColorForCrop(const string& crop) {
+string randomColorForCrop(const string& crop) {
     // includes both ripe and not-ripe colors
     if (crop == "tomato") {
         int x = randInt(1, 4);
@@ -73,8 +75,6 @@ void checkEnvironmentAuto() {
         mistOn = false;
     }
 
-    uvOn = true;
-
     // optional log (you can remove prints if leader hates extra output)
     cout << "\n[Environment] Temp=" << tempC
          << "C AirHum=" << airHumidity
@@ -82,7 +82,7 @@ void checkEnvironmentAuto() {
          << "% PPM=" << nutrientPPM << "\n";
 }
 
-bool harvestAuto(const std::string& crop) {
+bool harvestAuto(const string& crop) {
     string color = randomColorForCrop(crop);
 
     // random kg ranges per crop 
@@ -90,7 +90,6 @@ bool harvestAuto(const std::string& crop) {
     if (crop == "tomato") kg = randDouble(0.2, 2.0);
     else if (crop == "cucumber") kg = randDouble(0.2, 1.5);
     else if (crop == "pumpkin") kg = randDouble(0.8, 4.0);
-    else kg = randDouble(0.1, 1.0);
 
     cout << "\nCrop: " << crop << " | Color: " << color << "\n";
 
@@ -113,9 +112,19 @@ double getTomatoKgToday() {
     checkEnvironmentAuto();
     harvestAuto("tomato");
     cout << "\n--- FlexiFarm Status (Tomato) ---\n";
-    cout << "Heating: " << (heatingOn ? "ON" : "OFF") << "\n";
+    cout << "Heating: " << (heatingOn ? "ON" : "OFF") << "\n"; 
+    /*
+    (heatingOn ? "ON" : "OFF")
+
+    is same as
+
+    if (heatingOn){
+        cout << "ON";
+    } else{
+        cout << "OFF"; 
+    }
+    */
     cout << "Mist: " << (mistOn ? "ON" : "OFF") << "\n";
-    cout << "UV: " << (uvOn ? "ON" : "OFF") << "\n";
     cout << "Tomato harvested today: " << tomatoKgToday << " kg\n";
     cout << "--------------------------------\n";
 
@@ -128,7 +137,6 @@ double getCucumberKgToday() {
     cout << "\n--- FlexiFarm Status (Cucumber) ---\n";
     cout << "Heating: " << (heatingOn ? "ON" : "OFF") << "\n";
     cout << "Mist: " << (mistOn ? "ON" : "OFF") << "\n";
-    cout << "UV: " << (uvOn ? "ON" : "OFF") << "\n";
     cout << "Cucumber harvested today: " << cucumberKgToday << " kg\n";
     cout << "----------------------------------\n";
 
@@ -141,7 +149,6 @@ double getPumpkinKgToday() {
     cout << "\n--- FlexiFarm Status (Pumpkin) ---\n";
     cout << "Heating: " << (heatingOn ? "ON" : "OFF") << "\n";
     cout << "Mist: " << (mistOn ? "ON" : "OFF") << "\n";
-    cout << "UV: " << (uvOn ? "ON" : "OFF") << "\n";
     cout << "Pumpkin harvested today: " << pumpkinKgToday << " kg\n";
     cout << "---------------------------------\n";
 
