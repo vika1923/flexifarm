@@ -1,7 +1,6 @@
 // Include libraries for random numbers and time
 #include <cstdlib>   // For rand() function (random numbers)
 #include <iostream>
-#include <vector>
 
 using namespace std;
 
@@ -21,6 +20,7 @@ public:
             fertilized = (rand() % 2 == 0);  // 50% chance fertilized
         }
     }
+
 };
 
 class Incubator {
@@ -55,7 +55,6 @@ public:
                 deadEggs++;
             }
         }
-        
 
         // Stage 2 eggs move to stage 3 or die
         for (int i = 0; i < eggsStage2; i++) {
@@ -65,7 +64,6 @@ public:
                 deadEggs++;
             }
         }
-
 
         // Stage 1 eggs move to stage 2 or die
         for (int i = 0; i < eggsStage1; i++) {
@@ -91,8 +89,9 @@ public:
 
         return r;
 
-        
+
     }
+
 };
 
 class Selector {
@@ -104,11 +103,11 @@ public:
         incubator = inc;
     }
 
-    int checkHens(vector<Hen>& hens) {
+    int checkHens(Hen hens[], int size) {
         int unfertilized = 0;
         int fertilized = 0;
 
-        for (int i = 0; i < hens.size(); i++) {
+        for (int i = 0; i < size; i++) {
             if (hens[i].laidEgg) {
                 // Randomly check if fertilized
                 bool checkResult = (rand() % 2 == 0) ? hens[i].fertilized : !hens[i].fertilized;
@@ -123,20 +122,23 @@ public:
         incubator->addEggs(fertilized); // (*incubator).addEggs(fertilized);
         return unfertilized;
     }
+
 };
 
 // Global instances
-vector<Hen> hens(5);  // 5 hens
+const int NUM_HENS = 5;
+Hen hens[NUM_HENS];  // 5 hens
 Incubator incubator;
 Selector selector(&incubator);
 
 int getNotFertilizedEggs() {
     // Make all hens lay eggs
-    for (int i = 0; i < hens.size(); i++) {
+    for (int i = 0; i < NUM_HENS; i++) {
         hens[i].layEgg();
     }
+
     // Check hens and return unfertilized count
-    return selector.checkHens(hens);
+    return selector.checkHens(hens, NUM_HENS);
 }
 
 int getHatchedChicks() {
